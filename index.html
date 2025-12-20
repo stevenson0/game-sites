@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoArcade Game Lab</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+  
+  <!-- Inline fallback script in case external JS doesn't load -->
+  <script>
+    // Ensure content shows even if external script fails
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.querySelectorAll('.slide-in-left, .slide-in-bottom, .slide-in-right').forEach(function(el) {
+          el.classList.add('visible');
+        });
+      }, 300);
+    });
+  </script>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+  <canvas id="matrix-bg"></canvas>
+  <!-- ============================
+     PORTAL LOADER SCREEN
+     ============================ -->
+     <div id="portal-loader">
+      <div class="portal-circle"></div>
+      <div class="portal-inner"></div>
+      <p class="portal-text">Entering Portal<span class="dots">...</span></p>
+    </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-container">
+        <div class="logo-brackets">
+          <span class="bracket-left">[</span>
+          <div class="logo">
+            <span class="logo-accent">Neo</span>Arcade
+          </div>
+          <span class="bracket-right">]</span>
+        </div>
+        <div class="system-status">
+          <span class="status-dot"></span>
+          <span class="status-text">SYSTEM ONLINE</span>
+        </div>
+      </div>
+
+      <nav class="main-nav">
+        <div class="nav-wrapper">
+          <a href="#hero" class="nav-link active">
+            <span class="nav-index">01</span>
+            <span class="nav-text">Home</span>
+            <span class="nav-indicator"></span>
+          </a>
+          <a href="#games" class="nav-link">
+            <span class="nav-index">02</span>
+            <span class="nav-text">Games</span>
+            <span class="nav-indicator"></span>
+          </a>
+          <a href="#about" class="nav-link">
+            <span class="nav-index">03</span>
+            <span class="nav-text">About</span>
+            <span class="nav-indicator"></span>
+          </a>
+          <a href="#contact" class="nav-link">
+            <span class="nav-index">04</span>
+            <span class="nav-text">Contact</span>
+            <span class="nav-indicator"></span>
+          </a>
+        </div>
+        <div class="nav-hexagon"></div>
+      </nav>
+    </div>
+    
+    <!-- Scan line effect -->
+    <div class="scan-line"></div>
+    
+    <!-- Corner accents -->
+    <div class="corner-accent corner-tl"></div>
+    <div class="corner-accent corner-tr"></div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section id="hero" class="section hero">
+      <div class="hero-scanlines"></div>
+      <div class="hero-visual slide-in-left">
+        <div class="hero-image-container">
+          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=1000&fit=crop" alt="Game Development" class="hero-image">
+          <div class="hero-image-overlay"></div>
+          <!-- HOLOGRAM OVERLAY -->
+          <div class="holo-scan"></div>
+          <div class="holo-noise"></div>
+        </div>
+      </div>
+
+      <div class="hero-content slide-in-bottom">
+        <p class="hero-kicker">Indie Game Developer // Portfolio</p>
+        <h1 class="hero-title">
+          <span id="typewriter"></span><span class="cursor">_</span>
+        </h1>
+        <p class="hero-subtitle">
+          A collection of games built by one curious mind, experimenting with
+          mechanics, worlds and stories.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn primary" data-scroll-to="#games">
+            ▶ Play Latest Build
+          </button>
+          <button class="btn ghost" data-scroll-to="#about">
+            ⓘ Learn About Me
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAMES SECTION -->
+    <section id="games" class="section games">
+      <div class="games-scroll-container">
+        <!-- GAME ITEM 1 -->
+        <div class="game-scroll-item" data-game-index="0">
+          <div class="game-info-side">
+            <div class="game-info-content">
+              <p class="game-number">01</p>
+              <h2 class="game-info-title">Cyber Runner</h2>
+              <p class="game-info-genre">Endless Runner // Arcade</p>
+              <p class="game-info-desc">
+                Dash through neon alleys, dodge drones, and hack gates in a fast-paced futuristic runner. 
+                Neon-soaked rooftops, tight jumps and split-second decisions.
+              </p>
+              <div class="tag-row">
+                <span class="tag">PC</span>
+                <span class="tag">Web</span>
+                <span class="tag">Prototype</span>
+              </div>
+              <div class="game-info-actions">
+                <button class="btn primary play-btn">▶ Play Now</button>
+                <button class="btn ghost details-btn">More Info</button>
+              </div>
+            </div>
+          </div>
+          <div class="game-visual-side">
+            <div class="game-visual-card">
+              <div class="game-thumb thumb-1">
+                <span class="badge">NEW</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GAME ITEM 2 -->
+        <div class="game-scroll-item" data-game-index="1">
+          <div class="game-info-side">
+            <div class="game-info-content">
+              <p class="game-number">02</p>
+              <h2 class="game-info-title">Starforge Tactics</h2>
+              <p class="game-info-genre">Tactical // Strategy</p>
+              <p class="game-info-desc">
+                Command a small fleet, outsmart enemy AI, and bend gravity to your advantage. 
+                Turn-based battles in deep space with reactive enemy behavior.
+              </p>
+              <div class="tag-row">
+                <span class="tag">PC</span>
+                <span class="tag">In Progress</span>
+              </div>
+              <div class="game-info-actions">
+                <button class="btn primary play-btn">▶ Play Now</button>
+                <button class="btn ghost details-btn">More Info</button>
+              </div>
+            </div>
+          </div>
+          <div class="game-visual-side">
+            <div class="game-visual-card">
+              <div class="game-thumb thumb-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GAME ITEM 3 -->
+        <div class="game-scroll-item" data-game-index="2">
+          <div class="game-info-side">
+            <div class="game-info-content">
+              <p class="game-number">03</p>
+              <h2 class="game-info-title">Pixel Dungeons</h2>
+              <p class="game-info-genre">Roguelike // Puzzle</p>
+              <p class="game-info-desc">
+                Minimalist dungeon crawler where every move counts and every room is a tiny puzzle. 
+                Procedural levels, permadeath, and tight, readable combat.
+              </p>
+              <div class="tag-row">
+                <span class="tag">Web</span>
+                <span class="tag">Prototype</span>
+              </div>
+              <div class="game-info-actions">
+                <button class="btn primary play-btn">▶ Play Now</button>
+                <button class="btn ghost details-btn">More Info</button>
+              </div>
+            </div>
+          </div>
+          <div class="game-visual-side">
+            <div class="game-visual-card">
+              <div class="game-thumb thumb-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section about">
+      <div class="section-header slide-in-bottom">
+        <h2>About the Dev</h2>
+        <p>Skills, tools, and the journey behind the games</p>
+      </div>
+
+      <div class="about-grid">
+        <!-- Developer Profile Card -->
+        <div class="about-card profile-card slide-in-bottom">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h3>Indie Developer</h3>
+          <p>Passionate about crafting unique gaming experiences. From concept to code, I build worlds that players want to explore.</p>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="stat-number">3+</span>
+              <span class="stat-label">Games Built</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">2+</span>
+              <span class="stat-label">Years Exp</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Design Card -->
+        <div class="about-card skill-card slide-in-bottom">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="3" x2="6" y2="15"></line>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <path d="M18 9a9 9 0 0 1-9 9"></path>
+            </svg>
+          </div>
+          <h3>Game Design</h3>
+          <p>Mechanics that engage, systems that surprise, and gameplay that keeps players coming back.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Level Design</span>
+            <span class="skill-tag">Game Mechanics</span>
+            <span class="skill-tag">Balancing</span>
+          </div>
+        </div>
+
+        <!-- Programming Card -->
+        <div class="about-card skill-card slide-in-bottom">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3>Programming</h3>
+          <p>Clean code, optimized performance, and scalable systems for smooth gameplay.</p>
+          <div class="skill-progress">
+            <div class="progress-item">
+              <span>JavaScript / HTML / CSS</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 90%"></div>
+              </div>
+            </div>
+            <div class="progress-item">
+              <span>C# / Unity</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%"></div>
+              </div>
+            </div>
+            <div class="progress-item">
+              <span>GDScript / Godot</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 65%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tools & Tech Card -->
+        <div class="about-card tools-card slide-in-bottom">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+          </div>
+          <h3>Tools & Engine</h3>
+          <p>Leveraging the best tools to bring ideas to life efficiently.</p>
+          <div class="tools-grid">
+            <div class="tool-item">
+              <span class="tool-name">Unity</span>
+            </div>
+            <div class="tool-item">
+              <span class="tool-name">Godot</span>
+            </div>
+            <div class="tool-item">
+              <span class="tool-name">Phaser</span>
+            </div>
+            <div class="tool-item">
+              <span class="tool-name">Git</span>
+            </div>
+            <div class="tool-item">
+              <span class="tool-name">Blender</span>
+            </div>
+            <div class="tool-item">
+              <span class="tool-name">Aseprite</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Art & Design Card -->
+        <div class="about-card skill-card slide-in-bottom">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+          </div>
+          <h3>Art & UI/UX</h3>
+          <p>Visual design that complements gameplay and creates memorable experiences.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">UI Design</span>
+            <span class="skill-tag">Pixel Art</span>
+            <span class="skill-tag">Animation</span>
+          </div>
+        </div>
+
+        <!-- Roadmap Card -->
+        <div class="about-card roadmap-card slide-in-bottom">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>What's Next?</h3>
+          <p>Always learning, always building. Here's what's on the horizon.</p>
+          <ul class="roadmap-list">
+            <li>🎮 Launch multiplayer prototype</li>
+            <li>📱 Mobile game port</li>
+            <li>🎨 Advanced shader programming</li>
+            <li>🌐 Build dev community</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO SHOWCASE SECTION -->
+    <section id="video-showcase" class="section video-showcase">
+      <div class="video-container slide-in-bottom">
+        <video class="showcase-video" autoplay loop muted playsinline>
+          <source src="https://www.youtube.com/watch?v=7pBGS_tKfmU" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay">
+          <h2 class="video-title">Experience the Journey</h2>
+          <p class="video-subtitle">Watch our latest development showcase</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section contact">
+      <div class="section-header slide-in-bottom">
+        <h2>Initiate Contact</h2>
+        <p>Open communication channel // Send transmission</p>
+      </div>
+
+      <div class="terminal-container slide-in-bottom">
+        <div class="terminal-header">
+          <div class="terminal-buttons">
+            <span class="term-btn red"></span>
+            <span class="term-btn yellow"></span>
+            <span class="term-btn green"></span>
+          </div>
+          <div class="terminal-title">contact@neoarcade:~$</div>
+          <div class="terminal-status">
+            <span class="connection-dot"></span>
+            <span>CONNECTED</span>
+          </div>
+        </div>
+
+        <div class="terminal-body">
+          <div class="terminal-intro">
+            <p class="terminal-line">
+              <span class="prompt">></span> Initializing secure connection...
+            </p>
+            <p class="terminal-line">
+              <span class="prompt">></span> Connection established
+              <span class="success-text">[OK]</span>
+            </p>
+            <p class="terminal-line">
+              <span class="prompt">></span> Ready to receive transmission
+            </p>
+            <p class="terminal-line terminal-separator">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+          </div>
+
+          <form class="contact-form-terminal">
+            <div class="form-group">
+              <label class="terminal-label">
+                <span class="prompt">></span> ENTER_NAME:
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  id="name" 
+                  type="text" 
+                  class="terminal-input" 
+                  placeholder="player_one"
+                  autocomplete="off"
+                />
+                <span class="input-cursor"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="terminal-label">
+                <span class="prompt">></span> ENTER_EMAIL:
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  id="email" 
+                  type="email" 
+                  class="terminal-input" 
+                  placeholder="contact@example.com"
+                  autocomplete="off"
+                />
+                <span class="input-cursor"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="terminal-label">
+                <span class="prompt">></span> ENTER_MESSAGE:
+              </label>
+              <div class="input-wrapper">
+                <textarea
+                  id="message"
+                  rows="5"
+                  class="terminal-input terminal-textarea"
+                  placeholder="Type your message here..."
+                  autocomplete="off"
+                ></textarea>
+                <span class="input-cursor"></span>
+              </div>
+            </div>
+
+            <div class="terminal-actions">
+              <button type="submit" class="terminal-button">
+                <span class="btn-icon">▶</span>
+                <span class="btn-text">TRANSMIT_MESSAGE</span>
+                <span class="btn-loading" style="display: none;">
+                  <span class="loading-dots">
+                    <span>.</span><span>.</span><span>.</span>
+                  </span>
+                  SENDING
+                </span>
+              </button>
+            </div>
+
+            <div class="terminal-output" style="display: none;">
+              <p class="terminal-line">
+                <span class="prompt">></span> <span class="output-message"></span>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <!-- Stats Dashboard -->
+      <div class="footer-stats">
+        <h3 class="footer-title">
+          <span class="title-bracket">[</span>
+          DEVELOPER STATS
+          <span class="title-bracket">]</span>
+        </h3>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🎮</div>
+            <div class="stat-info">
+              <div class="stat-value">3+</div>
+              <div class="stat-label">Games Built</div>
+              <div class="stat-bar">
+                <div class="stat-fill" style="width: 75%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">💻</div>
+            <div class="stat-info">
+              <div class="stat-value">15K+</div>
+              <div class="stat-label">Lines of Code</div>
+              <div class="stat-bar">
+                <div class="stat-fill" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">☕</div>
+            <div class="stat-info">
+              <div class="stat-value">∞</div>
+              <div class="stat-label">Coffee Consumed</div>
+              <div class="stat-bar">
+                <div class="stat-fill infinite-fill" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-info">
+              <div class="stat-value">2+</div>
+              <div class="stat-label">Years Experience</div>
+              <div class="stat-bar">
+                <div class="stat-fill" style="width: 60%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      <div class="footer-social">
+        <h4 class="social-title">CONNECT</h4>
+        <div class="social-links">
+          <a href="#" class="social-link" title="GitHub">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+            <span>GitHub</span>
+          </a>
+          <a href="#" class="social-link" title="Twitter">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+            </svg>
+            <span>Twitter</span>
+          </a>
+          <a href="#" class="social-link" title="Discord">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+            <span>Discord</span>
+          </a>
+          <a href="#" class="social-link" title="Email">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>Email</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="footer-divider">
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-bottom">
+        <p class="copyright">
+          <span class="bracket">[</span>
+          © <span id="year"></span> NeoArcade // Built with 
+          <span class="heart">♥</span> by an Indie Dev
+          <span class="bracket">]</span>
+        </p>
+        <button class="back-to-top" id="backToTop" title="Back to top">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 15l-6-6-6 6"/>
+          </svg>
+          <span>TOP</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- GAME MODAL -->
+  <div class="modal-backdrop" id="game-modal">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <p class="modal-label">Game Overview</p>
+      <h3 class="modal-title" id="modal-title">Game Title</h3>
+      <p class="modal-genre" id="modal-genre"></p>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-footer">
+        <button class="btn small" id="modal-play-btn">Play (Mock)</button>
+        <span class="modal-status" id="modal-status">
+          This will link to your real game later.
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
