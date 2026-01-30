@@ -58,26 +58,56 @@ function setupNavHighlight() {
 }
 
 // ====== GAMES SCROLL REVEAL ANIMATION ======
+// ====== GAMES SCROLL REVEAL ANIMATION (GSAP) ======
 function setupGamesScrollReveal() {
-  const gameItems = document.querySelectorAll('.game-scroll-item');
-  
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        } else {
-          entry.target.classList.remove('active');
-        }
-      });
-    },
-    { 
-      threshold: 0.5, // Trigger when 50% of the item is visible
-      rootMargin: '-100px 0px -100px 0px' // Add some offset
-    }
-  );
+  if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+    console.warn("GSAP not loaded, falling back to CSS transitions");
+    // Fallback: simple class toggle
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => entry.target.classList.toggle('active', entry.isIntersecting));
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.game-scroll-item').forEach(el => observer.observe(el));
+    return;
+  }
 
-  gameItems.forEach((item) => observer.observe(item));
+  gsap.registerPlugin(ScrollTrigger);
+
+  const gameItems = document.querySelectorAll('.game-scroll-item');
+
+  gameItems.forEach((item, i) => {
+    // Animate info side
+    gsap.fromTo(item.querySelector('.game-info-side'),
+      { opacity: 0, x: -100 },
+      {
+        opacity: 1, x: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: item,
+          start: "top 80%",
+          end: "top 30%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Animate visual side
+    gsap.fromTo(item.querySelector('.game-visual-side'),
+      { opacity: 0, x: 100, scale: 0.9 },
+      {
+        opacity: 1, x: 0, scale: 1,
+        duration: 1,
+        delay: 0.2, // slight lag behind text
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: item,
+          start: "top 80%",
+          end: "top 30%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+  });
 }
 
 // ====== SECTION REVEAL ANIMATION ======
@@ -102,7 +132,7 @@ function setupSectionReveal() {
 // ====== SLIDE-IN ANIMATIONS (Bottom, Left, Right) ======
 function setupSlideInAnimations() {
   const slideElements = document.querySelectorAll('.slide-in-bottom, .slide-in-left, .slide-in-right');
-  
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -112,7 +142,7 @@ function setupSlideInAnimations() {
         }
       });
     },
-    { 
+    {
       threshold: 0.15,
       rootMargin: '0px 0px -50px 0px'
     }
@@ -127,7 +157,7 @@ function setupHeroAnimations() {
   setTimeout(() => {
     const heroImage = document.querySelector('.hero-visual.slide-in-left');
     const heroContent = document.querySelector('.hero-content.slide-in-bottom');
-    
+
     if (heroImage) {
       heroImage.classList.add('visible');
       console.log('Hero image animated');
@@ -172,7 +202,7 @@ function setupGameModal() {
 
   function openModal(gameIndex) {
     const game = gamesData[gameIndex];
-    
+
     modalTitle.textContent = game.title;
     modalGenre.textContent = game.genre;
     modalDesc.textContent = game.desc;
@@ -266,31 +296,31 @@ function setupContactForm() {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    
+
     const button = form.querySelector('.terminal-button');
     const btnText = button.querySelector('.btn-text');
     const btnLoading = button.querySelector('.btn-loading');
     const outputDiv = form.querySelector('.terminal-output');
     const outputMessage = form.querySelector('.output-message');
-    
+
     // Show loading state
     btnText.style.display = 'none';
     btnLoading.style.display = 'flex';
     button.disabled = true;
-    
+
     // Simulate sending
     setTimeout(() => {
       btnText.style.display = 'inline';
       btnLoading.style.display = 'none';
       button.disabled = false;
-      
+
       // Show success message
       outputMessage.textContent = 'Transmission successful! Message received. Will respond soon.';
       outputDiv.style.display = 'block';
-      
+
       // Reset form
       form.reset();
-      
+
       // Hide success message after 5 seconds
       setTimeout(() => {
         outputDiv.style.display = 'none';
@@ -303,7 +333,7 @@ function setupContactForm() {
 function setupBackToTop() {
   const backToTopBtn = document.getElementById('backToTop');
   if (!backToTopBtn) return;
-  
+
   backToTopBtn.addEventListener('click', () => {
     window.scrollTo({
       top: 0,
@@ -322,7 +352,7 @@ function setCurrentYear() {
 // ====== INIT ======
 document.addEventListener("DOMContentLoaded", () => {
   console.log('DOM Content Loaded - Initializing...');
-  
+
   setupSmoothScroll();
   setupNavHighlight();
   setupSectionReveal();
@@ -334,7 +364,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupContactForm();
   setupBackToTop(); // Add back to top functionality
   setCurrentYear();
-  
+
+
   // Add loaded class to body as fallback
   setTimeout(() => {
     document.body.classList.add('loaded');
@@ -342,85 +373,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 2000);
 });
 // =========================================
-// MATRIX-STYLE NEON PARTICLE BACKGROUND
+// MATRIX-STYLE NEON PARTICLE BACKGROUND (REMOVED)
 // =========================================
-(function () {
-  const canvas = document.getElementById("matrix-bg");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  let w = (canvas.width = window.innerWidth);
-  let h = (canvas.height = window.innerHeight);
-
-  const columns = Math.floor(w / 25); // number of vertical streams
-  const drops = Array(columns).fill(1); // starting position
-
-  const neonColors = ["#38bdf8", "#6366f1", "#a78bfa"];
-
-  function drawMatrix() {
-    ctx.fillStyle = "rgba(3, 7, 18, 0.07)"; // slight fade
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.font = "18px monospace";
-
-    for (let i = 0; i < drops.length; i++) {
-      const color = neonColors[i % neonColors.length];
-      ctx.fillStyle = color;
-
-      // Draw vertical streak (like falling code)
-      ctx.fillRect(i * 25, drops[i] * 20, 2, 20);
-
-      // Move it downwards
-      drops[i]++;
-
-      // Reset randomly
-      if (drops[i] * 20 > h && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-    }
-
-    requestAnimationFrame(drawMatrix);
-  }
-
-  drawMatrix();
-
-  // Resize handler
-  window.addEventListener("resize", () => {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  });
-})();
+// Code removed for performance
 // =========================================
-// 3D TILT HOVER EFFECT FOR GAME CARDS
+// 3D TILT HOVER EFFECT FOR GAME CARDS (REMOVED)
 // =========================================
-(function () {
-  const cards = document.querySelectorAll(".game-visual-card");
-
-  cards.forEach((card) => {
-    const height = card.offsetHeight;
-    const width = card.offsetWidth;
-
-    // Track mouse movement
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;  // mouse X
-      const y = e.clientY - rect.top;   // mouse Y
-
-      const rotateY = ((x - width / 2) / width) * 20;   // ±20deg
-      const rotateX = ((y - height / 2) / height) * -20;
-
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-      card.classList.add("tilt-active");
-    });
-
-    // Reset on mouse leave
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
-      card.classList.remove("tilt-active");
-    });
-  });
-})();
+// Code removed for performance. Native CSS hover is sufficient.
 
 // =========================================
 // HERO TYPING ANIMATION (TERMINAL STYLE)
@@ -481,39 +440,134 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 
 // =========================================
-// PORTAL LOADER CONTROL
+// PORTAL LOADER CONTROL (REMOVED)
 // =========================================
-(function () {
-  const loader = document.getElementById("portal-loader");
+// Loader removed for instant access.
 
-  // If already visited in session → skip instantly
-  const visited = sessionStorage.getItem("portalSkip");
+// =========================================
+// HOLOGRAM DISTORTION RANDOM FLICKER (REMOVED)
+// =========================================
+// Removed to reduce repaint/reflow operations.
 
-  if (visited) {
-    loader.style.display = "none";
-    return;
-  }
+// =========================================
+// DECRYPTION MINI-GAME LOGIC (GAMIFICATION)
+// =========================================
 
-  // Allow the loader to play ONCE per session
+
+// =========================================
+// ADVANCED ANIMATIONS (GSAP REPLACEMENTS)
+// =========================================
+
+// 1. MAGNETIC BUTTONS (REMOVED)
+function setupMagneticButtons() {
+  // Removed to improve mouse interactivity performance
+}
+
+// 2. TEXT SCRAMBLE / DECODE EFFECT
+function setupTextScramble() {
+  if (typeof gsap === "undefined") return;
+  // Ensure TextPlugin is registered if using it, 
+  // but we can also do a manual scramble for a lighter feel if plugin fails
+  if (gsap.plugins.TextPlugin) gsap.registerPlugin(TextPlugin);
+
+  // Targets: Section Headers
+  const headings = document.querySelectorAll('.section-header h2, .hero-title span#typewriter');
+
+  headings.forEach(heading => {
+    const originalText = heading.textContent.trim() || "NeoArcade";
+    if (!originalText) return;
+
+    // Create a ScrollTrigger for each
+    ScrollTrigger.create({
+      trigger: heading,
+      start: "top 85%",
+      onEnter: () => {
+        // Scramble animation
+        gsap.to(heading, {
+          duration: 1.5,
+          text: {
+            value: originalText,
+            delimiter: "",
+            scrambleText: {
+              text: originalText,
+              chars: "01", // Binary style scramble
+              revealDelay: 0.1,
+              speed: 0.3
+            }
+          },
+          ease: "none"
+        });
+      }
+    });
+  });
+}
+
+// 3. HERO PARALLAX (Subtle Mouse Movement)
+function setupHeroParallax() {
+  const heroSection = document.querySelector('.hero');
+  const heroVisual = document.querySelector('.hero-visual');
+  const heroContent = document.querySelector('.hero-content');
+
+  if (!heroSection || !heroVisual || typeof gsap === "undefined") return;
+
+  heroSection.addEventListener('mousemove', (e) => {
+    const xNorm = (e.clientX / window.innerWidth) - 0.5;
+    const yNorm = (e.clientY / window.innerHeight) - 0.5;
+
+    // Move visual opposite to mouse
+    gsap.to(heroVisual, {
+      x: xNorm * -30,
+      y: yNorm * -30,
+      rotationY: xNorm * 10,
+      rotationX: yNorm * -10,
+      duration: 1,
+      ease: "power2.out"
+    });
+
+    // Move content slightly (parallax depth)
+    gsap.to(heroContent, {
+      x: xNorm * -10,
+      y: yNorm * -10,
+      duration: 1,
+      ease: "power2.out"
+    });
+  });
+}
+
+// 4. ELASTIC SKILL BARS
+function setupSkillBarAnimations() {
+  if (typeof gsap === "undefined") return;
+
+  const bars = document.querySelectorAll('.progress-fill');
+
+  bars.forEach(bar => {
+    // Read the inline style width (e.g. "90%")
+    const finalWidth = bar.style.width || "0%";
+
+    // Reset to 0 initially
+    gsap.set(bar, { width: "0%" });
+
+    gsap.to(bar, {
+      width: finalWidth,
+      duration: 1.5,
+      ease: "elastic.out(1, 0.5)",
+      scrollTrigger: {
+        trigger: bar,
+        start: "top 85%"
+      }
+    });
+  });
+}
+
+// Init New Animations
+document.addEventListener("DOMContentLoaded", () => {
+  // Wait for libraries to load
   setTimeout(() => {
-    loader.classList.add("hide");
-    sessionStorage.setItem("portalSkip", "yes");
-  }, 2400); // 2.4s cinematic entry
-})();
+    setupDecryptionGame();
+    setupMagneticButtons();
+    setupTextScramble();
+    setupHeroParallax();
+    setupSkillBarAnimations();
+  }, 100);
+});
 
-// =========================================
-// HOLOGRAM DISTORTION RANDOM FLICKER
-// =========================================
-(function () {
-  const scan = document.querySelector(".holo-scan");
-  if (!scan) return;
-
-  function flicker() {
-    const extraSpeed = Math.random() * 1.2 + 0.4; // 0.4–1.6x speed
-    scan.style.animationDuration = `${3.2 * extraSpeed}s`;
-
-    setTimeout(flicker, 2500 + Math.random() * 2000); 
-  }
-
-  flicker();
-})();
